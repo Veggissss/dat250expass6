@@ -9,6 +9,7 @@ import { Todo } from './todo.model';
 })
 export class AppComponent {
   title = 'TodoApp';
+  inputCard = false;
 
   todos: Todo[] = [];
   newTodo : Todo = {
@@ -18,6 +19,10 @@ export class AppComponent {
   }
   
   constructor(private todoService : TodosService){
+  }
+
+  toggleInputCard(){
+    this.inputCard = !this.inputCard;
   }
 
   ngOnInit(): void {

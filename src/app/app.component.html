@@ -1,46 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos</title>
 </head>
+
 <body>
-  <h1>Todos</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let todo of todos">
-        <td>{{ todo.id }}</td>
-        <td>{{ todo.summary }}</td>
-        <td>{{ todo.description }}</td>
-        <td>
-            <button (click)="removeTodo(todo.id)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    <mat-toolbar>
+        <h1>Todo Manager</h1>
+    </mat-toolbar>
 
-  <button (click)="ngOnInit()">Refresh</button>
+    <button color="primary" mat-raised-button (click)="ngOnInit()">Refresh</button>
+    <button color="accent" mat-raised-button (click)="toggleInputCard()">Create New</button>
 
-  <h2>Todo</h2>
+    <mat-card *ngIf="inputCard">
+        <br>
+            <mat-form-field>
+                <input matInput placeholder="Summary" [(ngModel)]="newTodo.summary">
+            </mat-form-field>
 
-  <form (ngSubmit)="addNewTodo()" #todoForm="ngForm">
-    <label for="summary">Summary:</label><br>
-    <input type="text" id="summary" name="summary" [(ngModel)]="newTodo.summary" required><br>
-  
-    <label for="description">Description:</label><br>
-    <input id="description" name="description" [(ngModel)]="newTodo.description" required><br>
-  
-    <button type="submit">Add</button>
-  </form>
+            <mat-form-field>
+                <input matInput placeholder="Description" [(ngModel)]="newTodo.description">
+            </mat-form-field>
+
+        <mat-card-actions>
+            <button color="primary" mat-raised-button (click)="addNewTodo()">Save Todo!</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <table mat-table [dataSource]="todos" class="mat-elevation-z8">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let todo">{{ todo.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="summary">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let todo">{{ todo.summary }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let todo">{{ todo.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Operation</th>
+            <td mat-cell *matCellDef="let todo">
+                <button color="warn" mat-button (click)="removeTodo(todo.id)">Delete</button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['id', 'summary', 'description', 'actions']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['id', 'summary', 'description', 'actions']"></tr>
+    </table>
+
+
 
 </body>
+
 </html>
